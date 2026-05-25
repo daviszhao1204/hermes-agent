@@ -1,0 +1,10 @@
+pyproject.toml
+hermes_agent_modal/__init__.py
+hermes_agent_modal/modal.py
+hermes_agent_modal.egg-info/PKG-INFO
+hermes_agent_modal.egg-info/SOURCES.txt
+hermes_agent_modal.egg-info/dependency_links.txt
+hermes_agent_modal.egg-info/entry_points.txt
+hermes_agent_modal.egg-info/requires.txt
+hermes_agent_modal.egg-info/top_level.txt
+tests/test_modal_sandbox_fixes.py

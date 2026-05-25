@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+matrix = hermes_agent_matrix:register

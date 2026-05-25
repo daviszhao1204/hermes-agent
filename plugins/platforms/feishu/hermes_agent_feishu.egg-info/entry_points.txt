@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+feishu = hermes_agent_feishu:register

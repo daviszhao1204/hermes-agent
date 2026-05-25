@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+slack = hermes_agent_slack:register

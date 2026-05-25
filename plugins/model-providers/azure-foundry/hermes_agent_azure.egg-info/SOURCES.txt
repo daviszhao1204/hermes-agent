@@ -1,0 +1,12 @@
+pyproject.toml
+hermes_agent_azure/__init__.py
+hermes_agent_azure/adapter.py
+hermes_agent_azure.egg-info/PKG-INFO
+hermes_agent_azure.egg-info/SOURCES.txt
+hermes_agent_azure.egg-info/dependency_links.txt
+hermes_agent_azure.egg-info/entry_points.txt
+hermes_agent_azure.egg-info/requires.txt
+hermes_agent_azure.egg-info/top_level.txt
+tests/test_auxiliary_client_azure_foundry.py
+tests/test_azure_foundry_entra.py
+tests/test_azure_identity_adapter.py

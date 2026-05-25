@@ -1,0 +1,2 @@
+hermes-agent
+exa-py==2.10.2

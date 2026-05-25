@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+dashboard = hermes_agent_dashboard:register

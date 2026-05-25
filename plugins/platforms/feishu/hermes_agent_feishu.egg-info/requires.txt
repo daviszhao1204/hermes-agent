@@ -1,0 +1,3 @@
+hermes-agent
+lark-oapi==1.5.3
+qrcode==7.4.2

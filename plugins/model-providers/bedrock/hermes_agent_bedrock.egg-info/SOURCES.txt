@@ -1,0 +1,13 @@
+pyproject.toml
+hermes_agent_bedrock/__init__.py
+hermes_agent_bedrock/adapter.py
+hermes_agent_bedrock.egg-info/PKG-INFO
+hermes_agent_bedrock.egg-info/SOURCES.txt
+hermes_agent_bedrock.egg-info/dependency_links.txt
+hermes_agent_bedrock.egg-info/entry_points.txt
+hermes_agent_bedrock.egg-info/requires.txt
+hermes_agent_bedrock.egg-info/top_level.txt
+tests/test_bedrock_1m_context.py
+tests/test_bedrock_adapter.py
+tests/test_bedrock_integration.py
+tests/test_bedrock_model_picker.py

@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+telegram = hermes_agent_telegram:register

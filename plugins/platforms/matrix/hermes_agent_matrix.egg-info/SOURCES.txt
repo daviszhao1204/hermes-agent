@@ -1,0 +1,13 @@
+pyproject.toml
+hermes_agent_matrix/__init__.py
+hermes_agent_matrix/adapter.py
+hermes_agent_matrix.egg-info/PKG-INFO
+hermes_agent_matrix.egg-info/SOURCES.txt
+hermes_agent_matrix.egg-info/dependency_links.txt
+hermes_agent_matrix.egg-info/entry_points.txt
+hermes_agent_matrix.egg-info/requires.txt
+hermes_agent_matrix.egg-info/top_level.txt
+tests/test_matrix.py
+tests/test_matrix_exec_approval.py
+tests/test_matrix_mention.py
+tests/test_matrix_voice.py

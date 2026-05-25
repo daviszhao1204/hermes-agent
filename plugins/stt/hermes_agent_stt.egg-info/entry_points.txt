@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+stt = hermes_agent_stt:register

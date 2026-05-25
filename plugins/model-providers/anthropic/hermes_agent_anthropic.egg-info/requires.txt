@@ -1,0 +1,3 @@
+hermes-agent
+anthropic==0.87.0
+hermes-agent-azure

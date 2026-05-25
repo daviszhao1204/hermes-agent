@@ -1,0 +1,16 @@
+pyproject.toml
+hermes_agent_anthropic/__init__.py
+hermes_agent_anthropic/adapter.py
+hermes_agent_anthropic.egg-info/PKG-INFO
+hermes_agent_anthropic.egg-info/SOURCES.txt
+hermes_agent_anthropic.egg-info/dependency_links.txt
+hermes_agent_anthropic.egg-info/entry_points.txt
+hermes_agent_anthropic.egg-info/requires.txt
+hermes_agent_anthropic.egg-info/top_level.txt
+tests/test_anthropic_adapter.py
+tests/test_anthropic_keychain.py
+tests/test_anthropic_mcp_prefix_strip.py
+tests/test_anthropic_oauth_pkce.py
+tests/test_deepseek_anthropic_thinking.py
+tests/test_kimi_coding_anthropic_thinking.py
+tests/test_minimax_provider.py

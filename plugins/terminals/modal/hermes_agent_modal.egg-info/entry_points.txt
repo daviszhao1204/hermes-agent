@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+modal = hermes_agent_modal:register

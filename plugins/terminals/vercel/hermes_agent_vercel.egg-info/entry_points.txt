@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+vercel = hermes_agent_vercel:register

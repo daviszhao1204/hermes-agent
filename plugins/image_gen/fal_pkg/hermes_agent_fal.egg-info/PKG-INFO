@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: hermes-agent-fal
+Version: 0.1.0
+Summary: FAL.ai SDK plumbing plugin for Hermes Agent
+Requires-Python: >=3.11
+Requires-Dist: hermes-agent
+Requires-Dist: fal-client==0.13.1

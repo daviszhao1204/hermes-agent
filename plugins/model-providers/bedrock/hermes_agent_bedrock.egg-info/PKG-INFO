@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: hermes-agent-bedrock
+Version: 0.1.0
+Summary: AWS Bedrock Converse API adapter for Hermes Agent
+Requires-Python: >=3.11
+Requires-Dist: hermes-agent
+Requires-Dist: boto3==1.42.89

@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: hermes-agent-honcho
+Version: 1.0.0
+Summary: Honcho AI-native memory for Hermes Agent
+Requires-Python: >=3.11
+Requires-Dist: hermes-agent
+Requires-Dist: honcho-ai==2.0.1

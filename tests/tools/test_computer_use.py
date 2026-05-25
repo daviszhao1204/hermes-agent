@@ -600,7 +600,7 @@ class TestCaptureResponse:
 
 class TestAnthropicAdapterMultimodal:
     def test_multimodal_envelope_becomes_tool_result_with_image_block(self):
-        from agent.anthropic_adapter import convert_messages_to_anthropic
+        from hermes_agent_anthropic import convert_messages_to_anthropic
 
         fake_png = "iVBORw0KGgo="
         messages = [
@@ -640,7 +640,7 @@ class TestAnthropicAdapterMultimodal:
 
     def test_old_screenshots_are_evicted_beyond_max_keep(self):
         """Image blocks in old tool_results get replaced with placeholders."""
-        from agent.anthropic_adapter import convert_messages_to_anthropic
+        from hermes_agent_anthropic import convert_messages_to_anthropic
 
         fake_png = "iVBORw0KGgo="
 
@@ -704,7 +704,7 @@ class TestAnthropicAdapterMultimodal:
         assert len(placeholders) == 2
 
     def test_content_parts_helper_filters_to_text_and_image(self):
-        from agent.anthropic_adapter import _content_parts_to_anthropic_blocks
+        from hermes_agent_anthropic import _content_parts_to_anthropic_blocks
 
         fake_png = "iVBORw0KGgo="
         blocks = _content_parts_to_anthropic_blocks([

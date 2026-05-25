@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+parallel = hermes_agent_parallel:register

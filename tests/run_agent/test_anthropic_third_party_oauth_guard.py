@@ -154,7 +154,7 @@ class TestOAuthFlagOnFallbackActivation:
 
     def test_fallback_to_third_party_does_not_flip_oauth(self, agent):
         """Directly mimic the post-fallback assignment at line ~6537."""
-        from agent.anthropic_adapter import _is_oauth_token
+        from hermes_agent_anthropic import _is_oauth_token
 
         # Emulate the relevant lines of _try_activate_fallback without
         # running the entire recovery stack (which pulls in streaming,
@@ -171,11 +171,11 @@ class TestApiKeyTokensAlwaysSafe:
     """Regression: plain API-key shapes must always resolve to non-OAuth, any provider."""
 
     def test_native_anthropic_with_api_key_token(self):
-        from agent.anthropic_adapter import _is_oauth_token
+        from hermes_agent_anthropic import _is_oauth_token
         assert _is_oauth_token(_API_KEY_TOKEN) is False
 
     def test_third_party_key_shape(self):
-        from agent.anthropic_adapter import _is_oauth_token
+        from hermes_agent_anthropic import _is_oauth_token
         # Third-party key shapes (MiniMax 'mxp-...', GLM 'glm.sess.', etc.)
         # already return False from _is_oauth_token; the guard adds a second
         # defense line in case future token formats accidentally look OAuth-y.

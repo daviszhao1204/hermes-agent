@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+tts = hermes_agent_tts:register

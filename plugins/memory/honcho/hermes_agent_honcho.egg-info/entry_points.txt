@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+honcho = hermes_agent_honcho:register

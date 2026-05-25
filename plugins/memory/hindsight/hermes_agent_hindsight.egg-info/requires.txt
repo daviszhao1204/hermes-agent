@@ -1,0 +1,2 @@
+hermes-agent
+hindsight-client==0.6.1

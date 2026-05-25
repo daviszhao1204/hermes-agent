@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: hermes-agent-parallel
+Version: 1.0.0
+Summary: Parallel.ai web search and content extraction for Hermes Agent
+Requires-Python: >=3.11
+Requires-Dist: hermes-agent
+Requires-Dist: parallel-web==0.4.2

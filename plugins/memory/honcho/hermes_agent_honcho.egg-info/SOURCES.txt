@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+hermes_agent_honcho.egg-info/PKG-INFO
+hermes_agent_honcho.egg-info/SOURCES.txt
+hermes_agent_honcho.egg-info/dependency_links.txt
+hermes_agent_honcho.egg-info/entry_points.txt
+hermes_agent_honcho.egg-info/requires.txt
+hermes_agent_honcho.egg-info/top_level.txt

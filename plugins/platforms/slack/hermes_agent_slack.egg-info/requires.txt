@@ -1,0 +1,4 @@
+hermes-agent
+slack-bolt==1.27.0
+slack-sdk==3.40.1
+aiohttp==3.13.3

@@ -1,0 +1,7 @@
+pyproject.toml
+hermes_agent_parallel.egg-info/PKG-INFO
+hermes_agent_parallel.egg-info/SOURCES.txt
+hermes_agent_parallel.egg-info/dependency_links.txt
+hermes_agent_parallel.egg-info/entry_points.txt
+hermes_agent_parallel.egg-info/requires.txt
+hermes_agent_parallel.egg-info/top_level.txt

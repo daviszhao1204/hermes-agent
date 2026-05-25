@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+discord = hermes_agent_discord:register

@@ -29,7 +29,9 @@ hermes-agent/
 ├── hermes_constants.py   # get_hermes_home(), display_hermes_home() — profile-aware paths
 ├── hermes_logging.py     # setup_logging() — agent.log / errors.log / gateway.log (profile-aware)
 ├── batch_runner.py       # Parallel batch processing
+├── _build_backend.py     # Custom PEP 517 build backend — inlines plugin deps at wheel build time
 ├── agent/                # Agent internals (provider adapters, memory, caching, compression, etc.)
+│   └── plugin_registries.py  # Typed capability registries (auth, transport, platform, tool, model_metadata)
 ├── hermes_cli/           # CLI subcommands, setup wizard, plugins loader, skin engine
 ├── tools/                # Tool implementations — auto-discovered via tools/registry.py
 │   └── environments/     # Terminal backends (local, docker, ssh, modal, daytona, singularity)
@@ -39,16 +41,20 @@ hermes-agent/
 │   │                     #   dingtalk, wecom, weixin, feishu, qqbot, bluebubbles,
 │   │                     #   yuanbao, webhook, api_server, ...). See ADDING_A_PLATFORM.md.
 │   └── builtin_hooks/    # Extension point for always-registered gateway hooks (none shipped)
-├── plugins/              # Plugin system (see "Plugins" section below)
+├── plugins/              # Plugin packages — uv workspace members (see "Plugins" section)
+│   ├── model-providers/  # anthropic, bedrock, azure-foundry (own pyproject.toml each)
+│   ├── platforms/        # telegram, slack, discord, feishu, dingtalk, matrix
+│   ├── tts/              # Text-to-speech plugin
+│   ├── stt/              # Speech-to-text plugin
+│   ├── image_gen/        # FAL image generation
+│   ├── terminals/        # daytona, modal, vercel
+│   ├── web/              # exa, firecrawl, parallel
 │   ├── memory/           # Memory-provider plugins (honcho, mem0, supermemory, ...)
 │   ├── context_engine/   # Context-engine plugins
-│   ├── model-providers/  # Inference backend plugins (openrouter, anthropic, gmi, ...)
 │   ├── kanban/           # Multi-agent board dispatcher + worker plugin
 │   ├── hermes-achievements/  # Gamified achievement tracking
 │   ├── observability/    # Metrics / traces / logs plugin
-│   ├── image_gen/        # Image-generation providers
-│   └── <others>/         # disk-cleanup, example-dashboard, google_meet, platforms,
-│                         #   spotify, strike-freedom-cockpit, ...
+│   └── <others>/         # dashboard, google_meet, spotify, strike-freedom-cockpit, ...
 ├── optional-skills/      # Heavier/niche skills shipped but NOT active by default
 ├── skills/               # Built-in skills bundled with the repo
 ├── ui-tui/               # Ink (React) terminal UI — `hermes --tui`
@@ -486,9 +492,102 @@ Activate with `/skin cyberpunk` or `display.skin: cyberpunk` in config.yaml.
 
 ## Plugins
 
-Hermes has two plugin surfaces. Both live under `plugins/` in the repo so
-repo-shipped plugins can be discovered alongside user-installed ones in
-`~/.hermes/plugins/` and pip-installed entry points.
+Hermes uses a **plugin-first architecture**: every optional capability (model
+providers, platform adapters, TTS/STT, terminal backends, image generation)
+lives in its own installable Python package under `plugins/`. The core
+codebase (`agent/`, `hermes_cli/`, `gateway/`, `tools/`) **never** imports
+from a `hermes_agent_*` plugin package directly. Instead, plugins register
+their capabilities into typed registries during `register()`, and the core
+queries those registries at runtime.
+
+Full architecture doc: `website/docs/developer-guide/plugin-architecture.md`
+
+### Workspace layout
+
+All 21 builtin plugins are uv workspace members — each has its own
+`pyproject.toml` (single source of truth for deps), `plugin.yaml`
+(directory-scanner manifest for dev mode), and `hermes_agent_<name>/` package
+with `register(ctx)`:
+
+```
+plugins/
+├── model-providers/        # anthropic, bedrock, azure-foundry
+├── platforms/              # telegram, slack, discord, feishu, dingtalk, matrix
+├── tts/                    # text-to-speech (Edge TTS + ElevenLabs)
+├── stt/                    # speech-to-text
+├── image_gen/fal_pkg/      # FAL image generation
+├── terminals/              # daytona, modal, vercel
+├── web/                    # exa, firecrawl, parallel
+├── memory/                 # honcho, hindsight
+├── dashboard/              # streamlit dashboard
+└── hermes-achievements/    # gamified achievement tracking
+```
+
+### The hermetic core boundary
+
+Core code MUST NOT import from `hermes_agent_*` packages. Instead it queries
+typed registries in `agent/plugin_registries.py`:
+
+```python
+# ❌ BAD — core directly imports plugin
+from hermes_agent_bedrock import has_aws_credentials
+
+# ✅ GOOD — core queries the registry
+from agent.plugin_registries import registries
+bedrock_auth = registries.get_auth_provider("bedrock")
+```
+
+Registry types: `auth_providers`, `transport_builders`, `platform_adapters`,
+`tool_providers`, `model_metadata`, `credential_pools`.
+
+Each plugin's `register(ctx)` populates the registries via `ctx.register_*()`:
+- `ctx.register_auth_provider(name, provider, ...)`
+- `ctx.register_transport(name, builder, ...)`
+- `ctx.register_platform(name, label, adapter_factory, check_fn, ...)`
+- `ctx.register_tool_provider(entry, ...)`
+- `ctx.register_model_metadata(entry, ...)`
+- `ctx.register_credential_pool(entry, ...)`
+- Plus existing: `register_tool()`, `register_hook()`, `register_cli_command()`,
+  `register_tts_provider()`, `register_transcription_provider()`,
+  `register_image_gen_provider()`, `register_video_gen_provider()`,
+  `register_context_engine()`
+
+### Plugin discovery
+
+Three discovery paths (same as before, now workspace-aware):
+1. **Directory scanner** — `plugins/`, `~/.hermes/plugins/`, `.hermes/plugins/`
+   (looks for `plugin.yaml`)
+2. **Entry points** — `[project.entry-points."hermes_agent.plugins"]`
+3. **uv workspace** — `uv sync --extra <name>` installs the plugin into venv
+
+### Dependency management
+
+- Each plugin's `pyproject.toml` is the **only** place its deps are declared
+- Root `pyproject.toml` maps extras to workspace members:
+  `telegram = ["hermes-agent-telegram"]`
+- `uv.lock` resolves the whole workspace (236 packages)
+- No `LAZY_DEPS`, no `ensure()`, no runtime `pip install`
+- Custom PEP 517 build backend (`_build_backend.py`) inlines plugin deps
+  at wheel build time for PyPI publishing
+
+### NixOS
+
+`loadWorkspace` discovers all workspace members from `uv.lock` automatically.
+`mkVirtualEnv { hermes-agent = ["all"] }` installs all plugins. Select specific
+plugins with `extraDependencyGroups = ["telegram", "anthropic"]`.
+
+### Tests
+
+Plugin tests live in `plugins/<category>/<name>/tests/`. The test runner
+discovers both `tests/` and `plugins/`. Running plugin tests requires the
+plugin to be installed (`uv sync --extra <name>`).
+
+### The rule
+
+**If it can be a plugin, it must be a plugin.** Adding optional capabilities
+to core files is a code review rejection. If the plugin surface doesn't
+support what you need, extend the surface (new registry type, new hook, new
+`ctx` method) — don't inline the capability.
 
 ### General plugins (`hermes_cli/plugins.py` + `plugins/<name>/`)
 
@@ -531,9 +630,14 @@ providers don't clutter `hermes --help`.
 **Rule (Teknium, May 2026):** plugins MUST NOT modify core files
 (`run_agent.py`, `cli.py`, `gateway/run.py`, `hermes_cli/main.py`, etc.).
 If a plugin needs a capability the framework doesn't expose, expand the
-generic plugin surface (new hook, new ctx method) — never hardcode
-plugin-specific logic into core. PR #5295 removed 95 lines of hardcoded
-honcho argparse from `main.py` for exactly this reason.
+generic plugin surface (new hook, new ctx method, new registry type) — never
+hardcode plugin-specific logic into core. PR #5295 removed 95 lines of
+hardcoded honcho argparse from `main.py` for exactly this reason.
+
+**Hermetic core boundary (May 2026):** core code (`agent/`, `hermes_cli/`,
+`gateway/`, `tools/`) MUST NOT import from `hermes_agent_*` plugin packages.
+Use the typed registries in `agent/plugin_registries.py` instead. See the
+**Plugins** section below for the full list of registry types.
 
 **No new in-tree memory providers (policy, May 2026):** the set of
 built-in memory providers under `plugins/memory/` is closed. New memory

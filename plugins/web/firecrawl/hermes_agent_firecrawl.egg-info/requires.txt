@@ -1,0 +1,2 @@
+hermes-agent
+firecrawl-py==4.17.0

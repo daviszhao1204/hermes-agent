@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+azure = hermes_agent_azure:register

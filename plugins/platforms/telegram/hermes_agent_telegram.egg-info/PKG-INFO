@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: hermes-agent-telegram
+Version: 0.1.0
+Summary: Telegram platform adapter for Hermes Agent
+Requires-Python: >=3.11
+Requires-Dist: hermes-agent
+Requires-Dist: python-telegram-bot[webhooks]==22.6

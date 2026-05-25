@@ -30,7 +30,7 @@ Usage:
 
 Environment:
     HERMES_TEST_WORKERS  Override worker count (default: os.cpu_count())
-    HERMES_TEST_PATHS    Override discovery roots (colon-sep, default: 'tests')
+    HERMES_TEST_PATHS    Override discovery roots (colon-sep, default: 'tests:plugins')
 
 Exit code: 0 if every file's pytest exited 0; 1 otherwise.
 """
@@ -50,7 +50,7 @@ from typing import Dict, List, Tuple
 
 
 # Default test discovery roots.
-_DEFAULT_ROOTS = ["tests"]
+_DEFAULT_ROOTS = ["tests", "plugins"]
 
 # Directories to skip during discovery — these suites require real
 # external services (a model gateway, a docker daemon with a prebuilt

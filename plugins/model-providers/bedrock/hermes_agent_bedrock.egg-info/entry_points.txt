@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+bedrock = hermes_agent_bedrock:register

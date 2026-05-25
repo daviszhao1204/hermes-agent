@@ -1,0 +1,10 @@
+pyproject.toml
+hermes_agent_dingtalk/__init__.py
+hermes_agent_dingtalk/adapter.py
+hermes_agent_dingtalk.egg-info/PKG-INFO
+hermes_agent_dingtalk.egg-info/SOURCES.txt
+hermes_agent_dingtalk.egg-info/dependency_links.txt
+hermes_agent_dingtalk.egg-info/entry_points.txt
+hermes_agent_dingtalk.egg-info/requires.txt
+hermes_agent_dingtalk.egg-info/top_level.txt
+tests/test_dingtalk.py

@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: hermes-agent-slack
+Version: 0.1.0
+Summary: Slack platform adapter for Hermes Agent
+Requires-Python: >=3.11
+Requires-Dist: hermes-agent
+Requires-Dist: slack-bolt==1.27.0
+Requires-Dist: slack-sdk==3.40.1
+Requires-Dist: aiohttp==3.13.3

@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+exa = hermes_agent_exa:register

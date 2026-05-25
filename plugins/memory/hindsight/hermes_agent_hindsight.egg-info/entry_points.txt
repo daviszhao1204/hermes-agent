@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+hindsight = hermes_agent_hindsight:register

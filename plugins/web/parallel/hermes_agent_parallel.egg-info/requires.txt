@@ -1,0 +1,2 @@
+hermes-agent
+parallel-web==0.4.2

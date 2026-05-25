@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+daytona = hermes_agent_daytona:register

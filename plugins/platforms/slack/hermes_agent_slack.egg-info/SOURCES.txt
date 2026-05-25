@@ -1,0 +1,13 @@
+pyproject.toml
+hermes_agent_slack/__init__.py
+hermes_agent_slack/adapter.py
+hermes_agent_slack.egg-info/PKG-INFO
+hermes_agent_slack.egg-info/SOURCES.txt
+hermes_agent_slack.egg-info/dependency_links.txt
+hermes_agent_slack.egg-info/entry_points.txt
+hermes_agent_slack.egg-info/requires.txt
+hermes_agent_slack.egg-info/top_level.txt
+tests/test_slack.py
+tests/test_slack_approval_buttons.py
+tests/test_slack_channel_skills.py
+tests/test_slack_mention.py

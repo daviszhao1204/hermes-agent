@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: hermes-agent-matrix
+Version: 0.1.0
+Summary: Matrix platform adapter for Hermes Agent
+Requires-Python: >=3.11
+Requires-Dist: hermes-agent
+Requires-Dist: mautrix[encryption]==0.21.0
+Requires-Dist: Markdown==3.10.2
+Requires-Dist: aiosqlite==0.22.1
+Requires-Dist: asyncpg==0.31.0
+Requires-Dist: aiohttp-socks==0.11.0

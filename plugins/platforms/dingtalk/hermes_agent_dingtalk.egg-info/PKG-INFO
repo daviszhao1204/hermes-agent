@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: hermes-agent-dingtalk
+Version: 0.1.0
+Summary: DingTalk platform adapter for Hermes Agent
+Requires-Python: >=3.11
+Requires-Dist: hermes-agent
+Requires-Dist: dingtalk-stream==0.24.3
+Requires-Dist: alibabacloud-dingtalk==2.2.42
+Requires-Dist: qrcode==7.4.2

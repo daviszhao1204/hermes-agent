@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+anthropic = hermes_agent_anthropic:register

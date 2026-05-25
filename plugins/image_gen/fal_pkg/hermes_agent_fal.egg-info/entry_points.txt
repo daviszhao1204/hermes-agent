@@ -1,0 +1,2 @@
+[hermes_agent.plugins]
+fal = hermes_agent_fal:register

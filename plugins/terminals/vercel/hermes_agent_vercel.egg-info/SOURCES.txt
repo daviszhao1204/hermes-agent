@@ -1,0 +1,9 @@
+pyproject.toml
+hermes_agent_vercel/__init__.py
+hermes_agent_vercel/vercel_sandbox.py
+hermes_agent_vercel.egg-info/PKG-INFO
+hermes_agent_vercel.egg-info/SOURCES.txt
+hermes_agent_vercel.egg-info/dependency_links.txt
+hermes_agent_vercel.egg-info/entry_points.txt
+hermes_agent_vercel.egg-info/requires.txt
+hermes_agent_vercel.egg-info/top_level.txt
