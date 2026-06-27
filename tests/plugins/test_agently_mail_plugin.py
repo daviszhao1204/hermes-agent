@@ -89,6 +89,21 @@ def test_handle_mail_search_uses_query_string(monkeypatch):
     assert "msg_002" in rendered
 
 
+def test_handle_mail_search_supports_nested_data_payload(monkeypatch):
+    monkeypatch.setattr(
+        "plugins.agently_mail.cli.run_agently_cli",
+        lambda argv: CliInvocationResult(
+            exit_code=0,
+            stdout='{"ok": true, "data": {"data": [{"message_id": "msg_nested", "subject": "Hermes Agent Mail 联通测试", "from": {"email": "zhaolei0138@agent.qq.com"}}], "pagination": {"has_more": false, "next_cursor": ""}}}',
+            stderr="",
+        ),
+    )
+
+    rendered = handle_mail_search("Hermes Agent Mail 联通测试")
+
+    assert "msg_nested" in rendered
+
+
 def test_handle_mail_me_surfaces_reauth_instruction(monkeypatch):
     monkeypatch.setattr(
         "plugins.agently_mail.cli.run_agently_cli",
