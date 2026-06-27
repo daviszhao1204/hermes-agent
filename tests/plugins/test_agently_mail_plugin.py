@@ -87,3 +87,19 @@ def test_handle_mail_search_uses_query_string(monkeypatch):
 
     assert seen["argv"] == ["message", "+search", "--q", "project progress"]
     assert "msg_002" in rendered
+
+
+def test_handle_mail_me_surfaces_reauth_instruction(monkeypatch):
+    monkeypatch.setattr(
+        "plugins.agently_mail.cli.run_agently_cli",
+        lambda argv: CliInvocationResult(
+            exit_code=3,
+            stdout='{"ok": false, "error": {"message": "authorization required"}}',
+            stderr="tip: Authorization required; follow the agently mail skill OAuth login flow.",
+        ),
+    )
+
+    rendered = handle_mail_me("")
+
+    assert "agently-cli auth login" in rendered
+    assert "authorization required" in rendered
