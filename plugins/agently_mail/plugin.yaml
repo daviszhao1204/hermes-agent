@@ -1,0 +1,3 @@
+name: agently_mail
+version: 0.1.0
+description: "Expose Agent Mail mailbox access through agently-cli slash commands."
