@@ -103,3 +103,19 @@ def test_handle_mail_me_surfaces_reauth_instruction(monkeypatch):
 
     assert "agently-cli auth login" in rendered
     assert "authorization required" in rendered
+
+
+def test_handle_mail_read_formats_body_and_attachments(monkeypatch):
+    monkeypatch.setattr(
+        "plugins.agently_mail.cli.run_agently_cli",
+        lambda argv: CliInvocationResult(
+            exit_code=0,
+            stdout='{"ok": true, "data": {"message_id": "msg_100", "subject": "Invoice", "from": {"email": "finance@example.com"}, "body": "See attached.", "attachments": [{"attachment_id": "att_001", "filename": "invoice.pdf"}]}}',
+            stderr="",
+        ),
+    )
+
+    rendered = handle_mail_read("msg_100")
+
+    assert "msg_100" in rendered
+    assert "invoice.pdf" in rendered

@@ -47,7 +47,17 @@ def format_message_detail(payload: dict[str, Any]) -> str:
     sender = (payload.get("from") or {}).get("email", "(unknown sender)")
     body = payload.get("body") or payload.get("text_body") or "(empty email)"
     message_id = payload.get("message_id", "(missing id)")
-    return f"Message: {message_id}\nFrom: {sender}\nSubject: {subject}\n\n{body}"
+    attachments = payload.get("attachments") or []
+    attachment_lines = [
+        f"- {item.get('attachment_id', '(no id)')} | "
+        f"{item.get('filename', '(unnamed attachment)')}"
+        for item in attachments
+    ]
+    attachment_block = "\n".join(attachment_lines) if attachment_lines else "(none)"
+    return (
+        f"Message: {message_id}\nFrom: {sender}\nSubject: {subject}\n\n{body}"
+        f"\n\nAttachments:\n{attachment_block}"
+    )
 
 
 def format_search_results(payload: dict[str, Any]) -> str:
