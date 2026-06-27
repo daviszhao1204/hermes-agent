@@ -26,7 +26,10 @@ def format_mail_me(payload: dict[str, Any]) -> str:
 
 
 def format_message_list(payload: dict[str, Any]) -> str:
-    messages = payload.get("messages") or []
+    messages = payload.get("messages")
+    if messages is None:
+        messages = payload.get("data")
+    messages = messages or []
     if not messages:
         return "No messages found."
 
