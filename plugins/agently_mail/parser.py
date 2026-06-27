@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import html
 import json
+import re
 from typing import Any
 
 
@@ -45,10 +47,46 @@ def format_message_list(payload: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _strip_agent_mail_footer(text: str) -> str:
+    footer_start = text.find("此邮件由")
+    if footer_start == -1:
+        return text.strip()
+
+    footer = text[footer_start:]
+    if "Agent Mail" in footer and ("举报" in footer or "退订" in footer):
+        text = text[:footer_start]
+    return text.strip()
+
+
+def _html_to_text(value: str) -> str:
+    text = re.sub(r"(?i)<br\s*/?>", "\n", value)
+    text = re.sub(r"(?i)</p\s*>", "\n\n", text)
+    text = re.sub(r"(?i)</div\s*>", "\n", text)
+    text = re.sub(r"(?is)<[^>]+>", "", text)
+    text = html.unescape(text)
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    text = re.sub(r"[ \t]+\n", "\n", text)
+    text = re.sub(r"\n[ \t]+", "\n", text)
+    return text.strip()
+
+
+def render_message_body(payload: dict[str, Any]) -> str:
+    text_body = payload.get("text_body")
+    if text_body:
+        return _strip_agent_mail_footer(text_body)
+
+    body = payload.get("body") or ""
+    if payload.get("body_format") == "HTML":
+        return _strip_agent_mail_footer(_html_to_text(body))
+
+    return _strip_agent_mail_footer(body) if body else "(empty email)"
+
+
 def format_message_detail(payload: dict[str, Any]) -> str:
     subject = payload.get("subject", "(no subject)")
     sender = (payload.get("from") or {}).get("email", "(unknown sender)")
-    body = payload.get("body") or payload.get("text_body") or "(empty email)"
+    body = render_message_body(payload)
     message_id = payload.get("message_id", "(missing id)")
     attachments = payload.get("attachments") or []
     attachment_lines = [

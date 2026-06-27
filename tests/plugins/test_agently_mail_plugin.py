@@ -134,3 +134,40 @@ def test_handle_mail_read_formats_body_and_attachments(monkeypatch):
 
     assert "msg_100" in rendered
     assert "invoice.pdf" in rendered
+
+
+def test_handle_mail_read_strips_html_and_agent_mail_footer(monkeypatch):
+    monkeypatch.setattr(
+        "plugins.agently_mail.cli.run_agently_cli",
+        lambda argv: CliInvocationResult(
+            exit_code=0,
+            stdout='{"ok": true, "data": {"message_id": "msg_html", "subject": "HTML body", "body_format": "HTML", "from": {"email": "sender@example.com"}, "body": "<div>第一段</div><div>第二段<br>第三行</div><div>此邮件由<a href=\\"https://agent.qq.com\\">Agent Mail</a>自动发送。<a href=\\"https://agent.qq.com/report\\">举报</a><a href=\\"https://agent.qq.com/unsub\\">退订</a></div>", "attachments": []}}',
+            stderr="",
+        ),
+    )
+
+    rendered = handle_mail_read("msg_html")
+
+    assert "<div" not in rendered
+    assert "第一段" in rendered
+    assert "第二段" in rendered
+    assert "第三行" in rendered
+    assert "此邮件由" not in rendered
+    assert "举报" not in rendered
+    assert "退订" not in rendered
+
+
+def test_handle_mail_read_preserves_meaningful_line_breaks(monkeypatch):
+    monkeypatch.setattr(
+        "plugins.agently_mail.cli.run_agently_cli",
+        lambda argv: CliInvocationResult(
+            exit_code=0,
+            stdout='{"ok": true, "data": {"message_id": "msg_breaks", "subject": "Line breaks", "body_format": "HTML", "from": {"email": "sender@example.com"}, "body": "<p>甲</p><p>乙</p><div>丙<br>丁</div>", "attachments": []}}',
+            stderr="",
+        ),
+    )
+
+    rendered = handle_mail_read("msg_breaks")
+
+    assert "甲\n\n乙" in rendered or "甲\n乙" in rendered
+    assert "丙\n丁" in rendered
